@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     @GetMapping("/")
-    public String helloWorld(){
+    public String helloWorld() {
         return "Hello in my Currency Exchange";
     }
 

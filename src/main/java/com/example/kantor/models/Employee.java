@@ -3,7 +3,7 @@ package com.example.kantor.models;
 import lombok.*;
 
 import javax.persistence.*;
-import java.math.BigInteger;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -11,17 +11,15 @@ import java.math.BigInteger;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "stock")
-public class Stock {
+@Table(name = "employee")
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private BigInteger amount;
+    private String firstName;
+    private String lastName;
 
-    @OneToOne
-    @JoinColumn(name = "currency_id", referencedColumnName = "id")
-    private Currency currency;
-
-
+    @OneToMany(mappedBy = "employee")
+    private Set<Exchange> exchangeList;
 }

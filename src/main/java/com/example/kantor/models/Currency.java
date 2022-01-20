@@ -3,6 +3,8 @@ package com.example.kantor.models;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -18,8 +20,9 @@ public class Currency {
     private Integer id;
     private String name;
     private String shortName;
+    private BigDecimal amount;
 
-    @OneToOne
-    @JoinColumn(name = "stock_id", referencedColumnName = "id")
-    private Stock stock;
+    @OneToMany(mappedBy = "currency")
+    private Set<ExchangeRate> rateSet;
+
 }
