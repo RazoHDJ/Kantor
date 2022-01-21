@@ -20,7 +20,7 @@ public class ExchangeRate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(precision = 4)
+    @Column(name = "value", precision = 17, scale = 4)
     private BigDecimal value;
     private Date date;
 
