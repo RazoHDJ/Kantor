@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Kantor - rejestracja</title>
+</head>
+<body>
+<div class="container text-center">
+    <div>
+        <h1>Rejestracja użytkownika</h1>
+    </div>
+    <form th:action="@{/process_register}" th:object="${registerUserDTO}"
+          method="post" style="max-width: 600px; margin: 0 auto;">
+        <div class="form-group row">
+            <label class="col-4 col-form-label">Imie: </label>
+            <div class="col-8">
+                <label>
+                    <input type="text" th:field="*{firstName}" class="form-control"
+                           required minlength="2" maxlength="20"/>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-4 col-form-label">Nazwisko: </label>
+            <div class="col-8">
+                <label>
+                    <input type="text" th:field="*{lastName}" class="form-control"
+                           required minlength="2" maxlength="20"/>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-4 col-form-label">Telefon: </label>
+            <div class="col-8">
+                <label>
+                    <input type="tel" placeholder="123-456-789" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}"
+                           th:field="*{phoneNumber}" class="form-control"
+                           required minlength="2" maxlength="20"/>
+                </label>
+            </div>
+        </div>
+
+        <div class="m-3">
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Login</label>
+                <div class="col-8">
+                    <label>
+                        <input type="text" th:field="*{userName}" class="form-control" required/>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Hasło: </label>
+                <div class="col-8">
+                    <label>
+                        <input type="password" th:field="*{password}" class="form-control"
+                               required minlength="6" maxlength="10"/>
+                    </label>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+</body>
+</html>

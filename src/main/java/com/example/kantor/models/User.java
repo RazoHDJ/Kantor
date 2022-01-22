@@ -10,6 +10,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user")
@@ -24,8 +25,15 @@ public class User {
 
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @ToString.Exclude
     private Set<Address> address;
 
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
     private Set<Exchange> exchangesList;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "login_id", referencedColumnName = "id")
+    private Login login;
+
 }
