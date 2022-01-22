@@ -17,9 +17,10 @@ public class LoginService {
     }
 
     public User registerUser(RegisterUserDTO newUser) {
+        // szyfrowanie hasła
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-
+        // zapisywanie użytkownika + danych logowania do bazy danych
         return userRepository.save(
                 User.builder()
                         .firstName(newUser.getFirstName())

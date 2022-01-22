@@ -23,7 +23,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/}">Kantor</a>
+        <a class="navbar-brand" href="#">Kantor</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03"
                 aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -31,47 +31,39 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" th:href="@{/}">Strona główna</a>
+                    <a class="nav-link" aria-current="page" th:href="@{/}">Strona główna</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/}">Wymiana walut</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/exchange_rates}">Kursy walut</a>
+                    <a class="nav-link active" href="#">Kursy walut</a>
                 </li>
             </ul>
-            <form class="d-flex">
-                <ul th:if="${isLogged}" class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item buttonsPadding">
-                        <p th:text="${user.getFirstName()}"></p>
-                    </li>
-                    <li class="nav-item buttonsPadding">
-                        <a role="button" class="btn btn-outline-info" th:href="@{/user}">Konto</a>
-                    </li>
-                    <li class="nav-item buttonsPadding">
-                        <a role="button" class="btn btn-secondary" th:href="@{/logout}">Wyloguj</a>
-                    </li>
-                </ul>
-                <ul th:if="${!isLogged}" class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item buttonsPadding">
-                        <a role="button" class="btn btn-success" th:href="@{/login}">Zaloguj </a>
-                    </li>
-                    <li class="nav-item buttonsPadding">
-                        <a role="button" class="btn btn-info" th:href="@{/register}">Zarejestruj</a>
-                    </li>
-                </ul>
-            </form>
         </div>
     </div>
 </nav>
 
 
 <div class="container">
-    <h1>Kantor Strong główna</h1>
-    <h3><a th:href="@{/user}">List of Users</a></h3>
-    <h3><a th:href="@{/register}">Register</a></h3>
-    <h3><a th:href="@{/login}">Login</a></h3>
-    <h3 th:text="'Czy zalogany:'+${isLogged}"></h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Pełna nazwa</th>
+            <th scope="col">Skrót</th>
+            <th scope="col">Wartość w PLN</th>
+            <th scope="col">Data aktualizacji</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="exchange : ${exchangeList}">
+            <td th:text="${exchange.getCurrency().getName()}"></td>
+            <td th:text="${exchange.getCurrency().getShortName()}"></td>
+            <td th:text="${exchange.getValue()}"></td>
+            <td th:text="${exchange.getDate()}"></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 </body>
