@@ -39,12 +39,5 @@ public class WebController {
         return "exchange_rates";
     }
 
-    @GetMapping("/user") // profil użytkownika
-    public String userProfile(Authentication authentication, Model model) {
-        securityService.getCurrentUser(authentication).ifPresent( user -> model.addAttribute("user", user));
-
-        return "user";
-    }
-
 
 }

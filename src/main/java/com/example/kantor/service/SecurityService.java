@@ -21,9 +21,7 @@ public class SecurityService {
         if (authentication == null)
             return Optional.empty();
 
-        final User currentUser = userRepository.getById(((MyUserDetails) authentication.getPrincipal()).getUserID());
-
-        return Optional.of(currentUser);
+        return userRepository.findById(((MyUserDetails) authentication.getPrincipal()).getUserID());
     }
 
 }

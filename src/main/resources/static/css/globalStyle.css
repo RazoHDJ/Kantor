@@ -10,4 +10,24 @@
     padding-right: 25px;
 }
 
+.addStandardPadding {
+    padding: 16px;
+}
 
+.buttonInRowPadding{
+    padding: 8px;
+}
+
+#userCard {
+    min-width: 400px;
+    margin: 100px;
+    padding: 20px;
+}
+
+#noAddresses {
+    padding: 60px 16px;
+}
+
+.centerText {
+    text-align: center;
+}
