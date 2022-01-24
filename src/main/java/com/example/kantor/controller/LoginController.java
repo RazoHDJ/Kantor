@@ -1,6 +1,6 @@
 package com.example.kantor.controller;
 
-import com.example.kantor.dto.RegisterUserDTO;
+import com.example.kantor.dto.RegisterEmployeeDTO;
 import com.example.kantor.service.LoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,15 +19,15 @@ public class LoginController {
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        model.addAttribute("registerUserDTO", new RegisterUserDTO());
+        model.addAttribute("registerEmployeeDTO", new RegisterEmployeeDTO());
         return "register";
     }
 
 
     @PostMapping("/process_register")
-    public String processRegister(RegisterUserDTO registerUserDTO) {
+    public String processRegister(RegisterEmployeeDTO registerEmployeeDTO) {
 
-        loginService.registerUser(registerUserDTO);
+        loginService.registerEmployee(registerEmployeeDTO);
 
         return "redirect:/login"; // przejscie do logowania
     }

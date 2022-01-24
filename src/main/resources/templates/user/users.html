@@ -31,18 +31,18 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" th:href="@{/}">Strona główna</a>
+                    <a class="nav-link active" aria-current="page" th:href="@{/}">Kurs wymiany walut</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/user}">Klienci</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/}">Wymiana walut</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/exchange_rates}">Kursy walut</a>
-                </li>
             </ul>
             <form class="d-flex">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item buttonsPadding">
+                    <li class="nav-item buttonsInNavbarPadding">
                         <a role="button" class="btn btn-secondary" th:href="@{/logout}">Wyloguj</a>
                     </li>
                 </ul>
@@ -52,35 +52,35 @@
 </nav>
 
 
-<div class="d-flex justify-content-center">
-
-    <div id="userCard" class="card text-white bg-dark">
-        <div class="card-body">
-            <form th:action="@{/user/update}" th:object="${user}" method="post">
-                <div class="input-group addStandardPadding">
-                    <span class="input-group-text">Imie i Nazwisko</span>
-                    <input type="text" aria-label="First name" class="form-control" th:field="*{firstName}">
-                    <input type="text" aria-label="Last name" class="form-control" th:field="*{lastName}">
-                </div>
-                <div class="input-group addStandardPadding">
-                    <span class="input-group-text">Numer telefonu</span>
-                    <input type="tel" aria-label="First name" class="form-control" th:field="*{phoneNumber}"
-                           placeholder="123-456-789" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" required minlength="11"
-                           maxlength="11">
-                </div>
-                <div class="addStandardPadding row">
-                    <div class="col">
-                        <button type="submit" class="btn btn-success">Potwierdź</button>
-                    </div>
-                    <div class="col">
-                        <a role="button" class="btn btn-warning float-end" th:href="@{/user}">Anuluj</a>
-                    </div>
-                </div>
-
-            </form>
-        </div>
-    </div>
-
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Imie i Nazwisko</th>
+            <th scope="col">Numer telefonu</th>
+            <th scope="col" style="width: min-content">Ilość transakcji</th>
+            <th scope="col" style="width: min-content">Ilość adresów</th>
+            <th scope="col" style="width: 20%;">
+                <a role="button" class="btn btn-success float-end" th:href="@{/user/addForm}">Dodaj</a>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <th th:text="${user.firstName + ' ' + user.lastName}"></th>
+            <td th:text="${user.phoneNumber}"></td>
+            <td th:text="${user.exchangesList.size()}"></td>
+            <td th:text="${user.address.size()}"></td>
+            <td style="width: 20%;">
+                <form th:action="@{'/user/{id}'(id=${user.id})}" th:method="delete">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" class="btn btn-danger float-end">Usuń</button>
+                </form>
+                <a role="button" class="btn btn-primary" th:href="@{'/user/{id}'(id=${user.id})}">Szczegóły</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 </body>

@@ -5,9 +5,8 @@
     padding-right: 50px;
 }
 
-.buttonsPadding {
-    padding-left: 25px;
-    padding-right: 25px;
+.buttonsInNavbarPadding {
+    padding: 10px 25px 10px 0;
 }
 
 .addStandardPadding {

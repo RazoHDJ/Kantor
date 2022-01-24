@@ -16,14 +16,14 @@ public class MyUserDetails implements UserDetails, Serializable {
     @Serial
     private static final long serialVersionUID = 6529685098267757690L;
 
-    private Integer userID;
+    private Integer employeeID;
     private String userName;
     private String password;
     private boolean active;
     private List<GrantedAuthority> authorities;
 
     public MyUserDetails(Login login) {
-        this.userID = login.getUser().getId();
+        this.employeeID = login.getEmployee().getId();
         this.userName = login.getUserName();
         this.password = login.getPassword();
         this.active = login.isActive();
@@ -33,8 +33,8 @@ public class MyUserDetails implements UserDetails, Serializable {
 
     public MyUserDetails() {}
 
-    public Integer getUserID(){
-        return userID;
+    public Integer getEmployeeID() {
+        return employeeID;
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.example.kantor.service;
 
+import com.example.kantor.models.Employee;
 import com.example.kantor.models.MyUserDetails;
-import com.example.kantor.models.User;
-import com.example.kantor.repository.UserRepository;
+import com.example.kantor.repository.EmployeeRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -11,17 +11,17 @@ import java.util.Optional;
 @Service
 public class SecurityService {
 
-    final private UserRepository userRepository;
+    final private EmployeeRepository employeeRepository;
 
-    public SecurityService(final UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public SecurityService(final EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
-    public Optional<User> getCurrentUser(Authentication authentication) {
+    public Optional<Employee> getCurrentEmployee(Authentication authentication) {
         if (authentication == null)
             return Optional.empty();
 
-        return userRepository.findById(((MyUserDetails) authentication.getPrincipal()).getUserID());
+        return employeeRepository.findById(((MyUserDetails) authentication.getPrincipal()).getEmployeeID());
     }
 
 }

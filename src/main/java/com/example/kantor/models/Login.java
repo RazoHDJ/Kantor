@@ -23,6 +23,6 @@ public class Login {
     private String roles;
 
     @OneToOne(mappedBy = "login")
-    private User user;
+    private Employee employee;
 
 }

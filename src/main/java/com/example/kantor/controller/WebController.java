@@ -1,6 +1,6 @@
 package com.example.kantor.controller;
 
-import com.example.kantor.models.User;
+import com.example.kantor.models.Employee;
 import com.example.kantor.service.ExchangeRateService;
 import com.example.kantor.service.SecurityService;
 import org.springframework.security.core.Authentication;
@@ -25,19 +25,15 @@ public class WebController {
     @GetMapping("/") // Strona główna
     public String homePage(Authentication authentication, Model model) {
 
-        model.addAttribute("isLogged", authentication != null);
-
-        final Optional<User> userOptional = securityService.getCurrentUser(authentication);
-        userOptional.ifPresent(user -> model.addAttribute("user", user));
-
+        if (authentication != null) {
+            final Optional<Employee> employeeOptional = securityService.getCurrentEmployee(authentication);
+            employeeOptional.ifPresent(employee -> {
+                model.addAttribute("employee", employee);
+                model.addAttribute("isAdmin", authentication.getAuthorities()
+                        .stream().anyMatch(roles -> roles.getAuthority().equals("ROLE_ADMIN")));
+            });
+        }
+        model.addAttribute("exchangeList", exchangeRateService.getAllExchangeRate());
         return "index";
     }
-
-    @GetMapping("/exchange_rates") // Strona wymiany walut
-    public String exchangeRate(Model model) {
-        model.addAttribute("exchangeList", exchangeRateService.getAllExchangeRate());
-        return "exchange_rates";
-    }
-
-
 }

@@ -31,9 +31,4 @@ public class User {
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
     private Set<Exchange> exchangesList;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "login_id", referencedColumnName = "id")
-    private Login login;
-
 }

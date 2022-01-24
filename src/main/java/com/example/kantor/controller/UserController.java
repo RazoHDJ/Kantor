@@ -1,7 +1,6 @@
 package com.example.kantor.controller;
 
 import com.example.kantor.models.Address;
-import com.example.kantor.models.MyUserDetails;
 import com.example.kantor.models.User;
 import com.example.kantor.service.SecurityService;
 import com.example.kantor.service.UserService;
@@ -23,38 +22,59 @@ public class UserController {
     }
 
     @GetMapping("") // profil użytkownika
-    public String userProfile(Authentication authentication, Model model) {
-        securityService.getCurrentUser(authentication).ifPresent( user -> model.addAttribute("user", user));
+    public String userProfile(Model model) {
+        model.addAttribute("users", userService.getAllUsers());
 
-        return "user";
+        return "user/users";
     }
 
+    @GetMapping("/addForm")
+    public String addUserForm(Model model){
+        model.addAttribute("user", new User());
+
+        return "user/user_edit";
+    }
+
+    @PostMapping("")
+    public String addUserToDatabase(@ModelAttribute User user){
+        userService.addUser(user);
+
+        return "redirect:/user";
+    }
+
+/*
+<a role="button" class="btn btn-success float-end" th:href="@{/user/addForm}">Dodaj</a>
+<form th:action="@{'/user/{id}'(id=${user.id})}" th:method="delete">
+<a role="button" class="btn btn-primary" th:href="@{'/user/{id}'(id=${user.id})}">Szczegóły</a>
+*
+*
+* */
+
     @GetMapping("/address")
-    public String createAddress(Model model){
+    public String createAddress(Model model) {
         model.addAttribute("address", new Address());
 
         return "add_address";
     }
 
     @PostMapping("/address")
-    public String addAddress(Authentication authentication, @ModelAttribute Address newAddress){
-        securityService.getCurrentUser(authentication).ifPresent(user -> userService.addAddress(user.getId(), newAddress));
+    public String addAddress(Authentication authentication, @ModelAttribute Address newAddress) {
+        securityService.getCurrentEmployee(authentication).ifPresent(user -> userService.addAddress(user.getId(), newAddress));
 
         return "redirect:/user";
     }
 
     @GetMapping("/edit")
     public String editUser(Authentication authentication, Model model) {
-        securityService.getCurrentUser(authentication).ifPresent(user -> model.addAttribute("user", user));
+        securityService.getCurrentEmployee(authentication).ifPresent(user -> model.addAttribute("user", user));
 
         return "user_edit";
     }
 
 
     @PostMapping("/update")
-    public String updateUser(Authentication authentication, @ModelAttribute User updatedUser) {
-        updatedUser.setId(((MyUserDetails) authentication.getPrincipal()).getUserID());
-       userService.updateUser(updatedUser);
+    public String updateUser(@ModelAttribute User updatedUser) {
+        userService.updateUser(updatedUser);
 
         return "redirect:/user";
     }

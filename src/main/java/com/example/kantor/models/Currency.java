@@ -18,7 +18,7 @@ public class Currency {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String name;
+    private String fullName;
     private String shortName;
     private BigDecimal amount;
 

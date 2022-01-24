@@ -8,12 +8,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class RegisterUserDTO {
+public class RegisterEmployeeDTO {
 
     private String userName;
     private String password;
     private String firstName;
     private String lastName;
-    private String phoneNumber;
 
 }
