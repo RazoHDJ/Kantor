@@ -4,7 +4,6 @@ import com.example.kantor.models.Address;
 import com.example.kantor.models.User;
 import com.example.kantor.service.SecurityService;
 import com.example.kantor.service.UserService;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,75 +13,81 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     final private UserService userService;
-    final private SecurityService securityService;
 
-    public UserController(final UserService userService, final SecurityService securityService) {
+    public UserController(final UserService userService) {
         this.userService = userService;
-        this.securityService = securityService;
     }
 
-    @GetMapping("") // profil użytkownika
+    @GetMapping("") // wszyscy użytkownicy
     public String userProfile(Model model) {
         model.addAttribute("users", userService.getAllUsers());
 
         return "user/users";
     }
 
-    @GetMapping("/addForm")
-    public String addUserForm(Model model){
+    @GetMapping("/{id}") // profil użytkownika
+    public String userProfile(@PathVariable Integer id, Model model) {
+        userService.getUser(id).ifPresent(user -> model.addAttribute("user", user));
+
+        return "user/user_preview";
+    }
+
+    @GetMapping("/addForm") // formularz dodawania użytkownika
+    public String addUserForm(Model model) {
         model.addAttribute("user", new User());
+
+        return "user/user_add";
+    }
+
+    @GetMapping("/edit/{id}") // edytowanie konkretnego użytkownika
+    public String editUser(@PathVariable Integer id, Model model) {
+        userService.getUser(id).ifPresent(user -> model.addAttribute("user", user));
 
         return "user/user_edit";
     }
 
-    @PostMapping("")
-    public String addUserToDatabase(@ModelAttribute User user){
+    @PostMapping("") //dodawanie do bazy danych użytkownika
+    public String addUserToDatabase(@ModelAttribute User user) {
         userService.addUser(user);
 
         return "redirect:/user";
     }
 
-/*
-<a role="button" class="btn btn-success float-end" th:href="@{/user/addForm}">Dodaj</a>
-<form th:action="@{'/user/{id}'(id=${user.id})}" th:method="delete">
-<a role="button" class="btn btn-primary" th:href="@{'/user/{id}'(id=${user.id})}">Szczegóły</a>
-*
-*
-* */
+    @PostMapping("/{id}") // update użytkownika w bazie danych
+    public String updateUserInDatabase(@ModelAttribute User user, @PathVariable Integer id) {
+        user.setId(id);
+        userService.updateUser(user);
 
-    @GetMapping("/address")
-    public String createAddress(Model model) {
+        return ("redirect:/user/"+id.toString());
+    }
+
+    @DeleteMapping("/{id}") //usuwanie użytkownika
+    public String deleteUser(@PathVariable Integer id) {
+        userService.deleteUser(id);
+        return "redirect:/user";
+    }
+
+
+    @GetMapping("/{id}/address") // fomularz dodawania użytkownika
+    public String openAddressForm(@PathVariable Integer id, Model model) {
         model.addAttribute("address", new Address());
+        model.addAttribute("userID", id);
 
-        return "add_address";
+        return "user/add_address";
     }
 
-    @PostMapping("/address")
-    public String addAddress(Authentication authentication, @ModelAttribute Address newAddress) {
-        securityService.getCurrentEmployee(authentication).ifPresent(user -> userService.addAddress(user.getId(), newAddress));
+    @PostMapping("/{id}/address") // dodawanie nowego adresu do użytkownika
+    public String addAddress(@PathVariable Integer id, @ModelAttribute Address newAddress) {
+        userService.addAddress(id, newAddress);
 
-        return "redirect:/user";
-    }
-
-    @GetMapping("/edit")
-    public String editUser(Authentication authentication, Model model) {
-        securityService.getCurrentEmployee(authentication).ifPresent(user -> model.addAttribute("user", user));
-
-        return "user_edit";
+        return ("redirect:/user/" + id.toString());
     }
 
 
-    @PostMapping("/update")
-    public String updateUser(@ModelAttribute User updatedUser) {
-        userService.updateUser(updatedUser);
-
-        return "redirect:/user";
-    }
-
-    @DeleteMapping("/address/{id}")
-    public String deleteAddress(@PathVariable Integer id) {
-        userService.deleteAddress(id);
-        return "redirect:/user";
+    @DeleteMapping("/{userID}/address/{addressID}") // usuwanie adresu użytkownika
+    public String deleteAddress(@PathVariable Integer addressID, @PathVariable Integer userID) {
+        userService.deleteAddress(userID, addressID);
+        return ("redirect:/user/" + userID.toString());
     }
 
 }

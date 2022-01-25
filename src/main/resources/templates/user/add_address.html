@@ -56,7 +56,7 @@
 
     <div id="userCard" class="card text-white bg-dark">
         <div class="card-body">
-            <form th:action="@{/user/address}" th:object="${address}" method="post">
+            <form th:action="@{'/user/{id}/address'(id=${userID})}" th:object="${address}" method="post">
                 <div class="input-group addStandardPadding">
                     <span class="input-group-text">Ulica</span>
                     <input type="text" aria-label="First name" class="form-control" required th:field="*{street}">
@@ -73,10 +73,10 @@
                 </div>
                 <div class="addStandardPadding row">
                     <div class="col">
-                        <button type="submit" class="btn btn-success">Dodaj adres</button>
+                        <a role="button" class="btn btn-warning" th:href="@{'/user/{userID}'(userID=${userID})}">Anuluj</a>
                     </div>
                     <div class="col">
-                        <a role="button" class="btn btn-warning float-end" th:href="@{/templates/user}">Anuluj</a>
+                        <button type="submit" class="btn btn-success float-end">Dodaj adres</button>
                     </div>
                 </div>
 

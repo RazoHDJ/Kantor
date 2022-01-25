@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -21,12 +23,13 @@ public class UserService {
     }
 
     public void updateUser(User updatedUser) {
-        User userToUpdate = userRepository.getById(updatedUser.getId());
-        userToUpdate.setFirstName(updatedUser.getFirstName());
-        userToUpdate.setLastName(updatedUser.getLastName());
-        userToUpdate.setPhoneNumber(updatedUser.getPhoneNumber());
+        userRepository.findById(updatedUser.getId()).ifPresent(user -> {
+        user.setFirstName(updatedUser.getFirstName());
+        user.setLastName(updatedUser.getLastName());
+        user.setPhoneNumber(updatedUser.getPhoneNumber());
 
-        userRepository.save(userToUpdate);
+        userRepository.save(user);
+        });
     }
 
     public void addAddress(Integer id, Address newAddress) {
@@ -37,8 +40,12 @@ public class UserService {
         });
     }
 
-    public void deleteAddress(Integer addressID) {
-        addressRepository.findById(addressID).ifPresent(addressRepository::delete);
+    public void deleteAddress(Integer userID, Integer addressID) {
+        addressRepository.findById(addressID).ifPresent(address -> {
+            if(Objects.equals(address.getUser().getId(), userID)){
+                addressRepository.delete(address);
+            }
+        });
     }
 
     public List<User> getAllUsers() {
@@ -48,6 +55,14 @@ public class UserService {
     }
 
     public void addUser(User user) {
+        userRepository.save(user);
+    }
 
+    public Optional<User> getUser(Integer id) {
+        return userRepository.findById(id);
+    }
+
+    public void deleteUser(Integer id) {
+        userRepository.findById(id).ifPresent(userRepository::delete);
     }
 }
