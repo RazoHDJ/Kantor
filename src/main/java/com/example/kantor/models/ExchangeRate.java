@@ -1,7 +1,6 @@
 package com.example.kantor.models;
 
 import lombok.*;
-import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -12,6 +11,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "exchange_rate")
@@ -28,10 +28,12 @@ public class ExchangeRate {
     @JoinColumn(name = "currency_id", nullable = false)
     private Currency currency;
 
-    @OneToMany(mappedBy = "exchangeRate")
-    private Set<Exchange> exchangeRateList; //kurs wymienienia
+    @OneToMany(mappedBy = "exchangeFrom")
+    @ToString.Exclude
+    private Set<Exchange> exchangeFromList; //kurs wymienienia
 
-    @OneToMany(mappedBy = "receiptRate")
-    private Set<Exchange> receiptRateList; //kurs otrzymania
+    @OneToMany(mappedBy = "exchangeTo")
+    @ToString.Exclude
+    private Set<Exchange> exchangeToList; //kurs otrzymania
 
 }

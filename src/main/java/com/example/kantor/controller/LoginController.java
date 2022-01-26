@@ -20,7 +20,7 @@ public class LoginController {
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("registerEmployeeDTO", new RegisterEmployeeDTO());
-        return "register";
+        return "employee/register";
     }
 
 

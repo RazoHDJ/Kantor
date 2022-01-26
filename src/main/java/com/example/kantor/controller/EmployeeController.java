@@ -21,7 +21,7 @@ public class EmployeeController {
     public String userProfile(Authentication authentication, Model model) {
         securityService.getCurrentEmployee(authentication).ifPresent(employee -> model.addAttribute("employee", employee));
 
-        return "employee";
+        return "employee/employee";
     }
 
 

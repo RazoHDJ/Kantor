@@ -4,6 +4,7 @@ package com.example.kantor.models;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -20,12 +21,12 @@ public class Exchange {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "exchange_rate_id")
-    private ExchangeRate exchangeRate; //kurs wymienienia
+    @JoinColumn(name = "exchange_to_rate_id")
+    private ExchangeRate exchangeTo; //kurs wymienienia
 
     @ManyToOne
-    @JoinColumn(name = "receipt_rate_id")
-    private ExchangeRate receiptRate; //kurs otrzymania
+    @JoinColumn(name = "exchange_from_rate_id")
+    private ExchangeRate exchangeFrom; //kurs otrzymania
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -36,7 +37,8 @@ public class Exchange {
     private Employee employee;
 
     private Date exchangeDate;
-    private Integer amount;
+    private BigDecimal amount;
+    private BigDecimal fullPrice;
 
 
 

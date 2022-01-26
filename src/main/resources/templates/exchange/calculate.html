@@ -31,13 +31,16 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" th:href="@{/}">Kurs wymiany walut</a>
+                    <a class="nav-link" aria-current="page" th:href="@{/}">Kurs walut</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/user}">Klienci</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/templates/exchangeRate}">Wymiana walut</a>
+                    <a class="nav-link active" th:href="@{/exchange}">Wymiana walut</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/exchange/all}">Historia transakcji</a>
                 </li>
             </ul>
             <form class="d-flex">
@@ -51,80 +54,72 @@
     </div>
 </nav>
 
-<div class="d-flex justify-content-center">
-
-    <div id="userCard" class="card text-white bg-dark">
-        <div class="card-body">
-            <form th:action="@{/exchange}" th:object="${currency}" th:method="post">
-                <div class="input-group addStandardPadding">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="pickCurrency"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                            Wybierz walutę
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="pickCurrency" th:each="current : ${currency}">
-                            <li><a class="dropdown-item" href="#" th:text="${current.shortName}"></a></li>
-                        </ul>
-                    </div>
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown button
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
-                    </div>
-                    <div class="dropdown">
-                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown link
-                        </a>
-
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
-                    </div>
-                    <span class="input-group-text">Ilość waluty:</span>
-                    <input type="number" aria-label="Amount" class="form-control" placeholder="123.45" required
-                           pattern="[0-9]+([/.,][0-9]+)?" step="0.01">
-                    <span class="input-group-text">Skrót</span>
-                    <input type="text" aria-label="Short name" class="form-control" required >
-                </div>
-                <div class="input-group addStandardPadding">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown button
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
-                    </div>
-                    <span class="input-group-text">Ilość waluty:</span>
-                    <input type="number" aria-label="Amount" class="form-control" placeholder="123.45" required
-                           pattern="[0-9]+([/.,][0-9]+)?" step="0.01">
-                    <span class="input-group-text">Wartość w PLN:</span>
-                    <input type="number" required aria-label="Value" class="form-control" placeholder="123.3456"
-                           pattern="[0-9]+([/.,][0-9]+)?" step="0.0001">
-                </div>
-                <div class="addStandardPadding row">
-                    <div class="col">
-                        <a role="button" class="btn btn-warning" th:href="@{/}">Anuluj</a>
-                    </div>
-                    <div class="col">
-                        <button type="submit" class="btn btn-success float-end">Dodaj</button>
-                    </div>
-                </div>
-
-            </form>
+<div class="container pane">
+    <form class="row" th:action="@{/exchange}" th:method="post" th:object="${exchangeDTO}">
+        <div class="col-12">
+            <h4>Dodawanie nowej transakcji</h4>
         </div>
-    </div>
+        <div class="form-group col-12">
+            <label for="inputClient">Klient</label>
+            <select th:field="${exchangeDTO.user}" class="form-control selectpicker" data-live-search="true"
+                    id="inputClient">
+                <option th:each="user : ${users}" th:value="${user.id}"
+                        th:text="${user.firstName + ' ' + user.lastName}"></option>
+            </select>
+        </div>
+        <div class="form-group col-12 col-lg-3">
+            <label for="inputFromCurrency">Waluta źródłowa</label>
+            <select th:field="${exchangeDTO.fromExchangeRate}" class="form-control selectpicker"
+                    data-live-search="true" id="inputFromCurrency">
+                <option th:each="exchangeRate : ${exchangeRates}" th:value="${exchangeRate.id}"
+                        th:text="${exchangeRate.currency.shortName+'('+exchangeRate.currency.fullName +')'}"
+                        th:data-value="${exchangeRate.value}"></option>
+            </select>
+        </div>
+        <div class="form-group col-12 col-lg-3">
+            <label for="inputValue">Ilość do wymiany</label>
+            <input type="number" step="0.01" class="form-control" id="inputValue" th:field="${exchangeDTO.amount}"
+                   placeholder="Wprowadź ilość waluty"/>
+        </div>
+        <div class="form-group col-12 col-lg-3">
+            <label for="inputToCurrency">Waluta docelowa</label>
+            <select th:field="${exchangeDTO.toExchangeRate}" class="form-control selectpicker"
+                    data-live-search="true" id="inputToCurrency">
+                <option th:each="exchangeRate : ${exchangeRates}" th:value="${exchangeRate.id}"
+                        th:text="${exchangeRate.currency.shortName+'('+exchangeRate.currency.fullName +')'}" th:data-value="${exchangeRate.value}"></option>
+            </select>
+        </div>
+        <div class="form-group col-12 col-lg-3">
+            <label for="inputOutValue">Ilość waluty docelowej:</label>
+            <input type="text" th:field="${exchangeDTO.fullPrice}" class="form-control" id="inputOutValue" disabled=""/>
+        </div>
+        <div class="col-12">
+            <hr/>
+            <button type="submit" class="btn btn-success float-end">Dodaj</button>
+        </div>
+    </form>
 
+    <script>
+        const inputValue = document.getElementById("inputValue");
+        const inputFromCurrency = document.getElementById("inputFromCurrency");
+        const inputToCurrency = document.getElementById("inputToCurrency");
+
+        const inputOutValue = document.getElementById("inputOutValue");
+
+        inputValue.addEventListener("input", update);
+
+        inputFromCurrency.addEventListener("change", update);
+
+        inputToCurrency.addEventListener("change", update)
+
+        function update() {
+            const fromValue = parseFloat(inputFromCurrency.options[inputFromCurrency.selectedIndex].getAttribute("data-value")).toFixed(4);
+            const fromAmount = parseFloat(inputValue.value).toFixed(2);
+            const toValue = parseFloat(inputToCurrency.options[inputToCurrency.selectedIndex].getAttribute("data-value")).toFixed(4);
+
+            inputOutValue.value = ((fromValue * fromAmount) / toValue).toFixed(2);
+        }
+    </script>
 </div>
 </body>
 </html>

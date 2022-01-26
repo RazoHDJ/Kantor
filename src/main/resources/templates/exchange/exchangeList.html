@@ -31,7 +31,7 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" th:href="@{/}">Kurs walut</a>
+                    <a class="nav-link" aria-current="page" th:href="@{/}">Kurs walut</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/user}">Klienci</a>
@@ -40,20 +40,11 @@
                     <a class="nav-link" th:href="@{/exchange}">Wymiana walut</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/exchange/all}">Historia transakcji</a>
-                </li>
-                <li class="nav-item" th:if="${isAdmin}">
-                    <a class="nav-link" th:href="@{/}">Pracownicy</a>
+                    <a class="nav-link active" th:href="@{/exchange/all}">Historia transakcji</a>
                 </li>
             </ul>
             <form class="d-flex">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item buttonsInNavbarPadding">
-                        <a class="nav-link" th:text="${(isAdmin ? 'Admin: ' : 'Pracownik: ') + employee.firstName}" th:href="@{/employee}">Konto pracownika</a>
-                    </li>
-                    <li th:if="${isAdmin}" class="nav-item buttonsInNavbarPadding">
-                        <a role="button" class="btn btn-info" th:href="@{/register}">Zarejestruj Pracownika</a>
-                    </li>
                     <li class="nav-item buttonsInNavbarPadding">
                         <a role="button" class="btn btn-secondary" th:href="@{/logout}">Wyloguj</a>
                     </li>
@@ -62,36 +53,35 @@
         </div>
     </div>
 </nav>
-
-
 <div class="container">
     <table class="table">
         <thead>
         <tr>
-            <th scope="col">Skrót</th>
-            <th scope="col">Pełna nazwa</th>
-            <th scope="col">Wartość w PLN</th>
-            <th scope="col">Posiadana ilość</th>
-            <th scope="col">Data aktualizacji</th>
-            <th scope="col" style="width: 20%;">
-                <a role="button" class="btn btn-success float-end" th:href="@{/exchange_rate}">Dodaj</a>
-            </th>
+            <th scope="col">Data</th>
+            <th scope="col">Wymiana z</th>
+            <th scope="col">Ilość</th>
+            <th scope="col">Wymiana na</th>
+            <th scope="col">Ilość</th>
+            <th scope="col">Użytkownik</th>
+            <th scope="col">Pracownik</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="exchange : ${exchangeList}">
-            <th th:text="${exchange.currency.shortName}"></th>
-            <td th:text="${exchange.currency.fullName}"></td>
-            <td th:text="${exchange.value}"></td>
-            <td th:text="${exchange.currency.amount}"></td>
-            <td th:text="${#dates.format(exchange.date, 'dd/MM/yyyy, HH:mm')}"></td>
-            <td style="width: 20%;">
-                <form th:action="@{'/exchange_rate/{id}'(id=${exchange.id})}" th:method="delete">
-                    <input type="hidden" name="_method" value="delete"/>
-                    <button type="submit" class="btn btn-danger float-end">Usuń</button>
-                </form>
-                <a role="button" class="btn btn-primary" th:href="@{'/exchange_rate/{id}'(id=${exchange.id})}">Edytuj</a>
-            </td>
+            <td th:text="${#dates.format(exchange.exchangeDate, 'dd/MM/yyyy, HH:mm')}"></td>
+            <td th:text="${exchange.exchangeFrom.currency.shortName + ' (' + exchange.exchangeFrom.currency.fullName + ')'}"></td>
+            <td th:text="${exchange.amount}"></td>
+            <td th:text="${exchange.exchangeTo.currency.shortName + ' (' + exchange.exchangeTo.currency.fullName +')'}"></td>
+            <td th:text="${exchange.fullPrice}"></td>
+            <td th:text="${exchange.user.firstName + ' ' + exchange.user.lastName}"></td>
+            <td th:text="${exchange.employee.firstName + ' ' + exchange.employee.lastName}"></td>
+            <!--            <td style="width: 20%;">-->
+            <!--                <form th:action="@{'/exchange_rate/{id}'(id=${exchange.id})}" th:method="delete">-->
+            <!--                    <input type="hidden" name="_method" value="delete"/>-->
+            <!--                    <button type="submit" class="btn btn-danger float-end">Usuń</button>-->
+            <!--                </form>-->
+            <!--                <a role="button" class="btn btn-primary" th:href="@{'/exchange_rate/{id}'(id=${exchange.id})}">Edytuj</a>-->
+            <!--            </td>-->
         </tr>
         </tbody>
     </table>

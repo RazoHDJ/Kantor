@@ -20,7 +20,7 @@ public class ExchangeRateController {
     public String addExchangeRateForm(Model model) {
         model.addAttribute("newExchangeRate", new NewExchangeRateDTO());
 
-        return "exchange/add_exchange_rate";
+        return "exchangeRate/add_exchange_rate";
     }
 
     @PostMapping("")
@@ -52,7 +52,7 @@ public class ExchangeRateController {
                         .build()));
         model.addAttribute("id", id);
 
-        return "exchange/edit_exchange_rate";
+        return "exchangeRate/edit_exchange_rate";
     }
 
 }
