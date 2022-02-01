@@ -59,11 +59,12 @@
 
     <div id="userCard" class="card text-white bg-dark">
         <div class="card-body">
-            <h5 class="card-title centerText" th:text="${employee.firstName + ' ' + employee.lastName}">Janusz
-                Mazur</h5>
-            <h5 class="card-subtitle centerText" th:text="${employee.getLogin().userName}">UserName</h5>
+            <h5 class="card-title centerText" th:text="${'Imie i nazwisko: ' + employee.firstName + ' ' + employee.lastName}">
+                Janusz Mazur
+            </h5>
+            <h5 class="card-subtitle centerText" th:text="${'Login: ' + employee.getLogin().userName}">UserName</h5>
 
-            <a role="button" class="btn btn-primary" th:href="">Edytuj konto</a>
+            <a role="button" class="btn btn-primary" th:href="@{/employee/edit}">Edytuj konto</a>
             <a role="button" class="btn btn-warning float-end" th:href="@{/}">Cofnij</a>
         </div>
     </div>

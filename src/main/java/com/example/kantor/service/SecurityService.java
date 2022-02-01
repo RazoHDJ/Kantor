@@ -24,4 +24,7 @@ public class SecurityService {
         return employeeRepository.findById(((MyUserDetails) authentication.getPrincipal()).getEmployeeID());
     }
 
+    public void saveEmployee(Employee emp) {
+        employeeRepository.save(emp);
+    }
 }

@@ -80,7 +80,7 @@ public class ExchangeController {
                 exchangeDTO.setEmployee(employee);
                 exchangeService.addNewExchange(exchangeDTO);
             });
-            return "exchange/exchangeList";
+            return "redirect:/exchange/all";
         }
     }
 

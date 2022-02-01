@@ -1,8 +1,9 @@
 package com.example.kantor.controller;
 
+import com.example.kantor.exceptions.UserNotFoundException;
 import com.example.kantor.models.Address;
 import com.example.kantor.models.User;
-import com.example.kantor.service.SecurityService;
+import com.example.kantor.service.ExchangeService;
 import com.example.kantor.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     final private UserService userService;
+    final private ExchangeService exchangeService;
 
-    public UserController(final UserService userService) {
+    public UserController(final UserService userService, final ExchangeService exchangeService) {
         this.userService = userService;
+        this.exchangeService = exchangeService;
     }
 
     @GetMapping("") // wszyscy użytkownicy
@@ -27,7 +30,10 @@ public class UserController {
 
     @GetMapping("/{id}") // profil użytkownika
     public String userProfile(@PathVariable Integer id, Model model) {
-        userService.getUser(id).ifPresent(user -> model.addAttribute("user", user));
+        userService.getUser(id).ifPresent(user -> {
+            model.addAttribute("user", user);
+            model.addAttribute("exchangeList", exchangeService.getUserExchanges(id));
+        });
 
         return "user/user_preview";
     }

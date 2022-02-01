@@ -5,6 +5,7 @@ import com.example.kantor.models.Currency;
 import com.example.kantor.models.Exchange;
 import com.example.kantor.repository.CurrencyRepository;
 import com.example.kantor.repository.ExchangeRepository;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -29,6 +30,10 @@ public class ExchangeService {
 
     public List<Exchange> getAllExchanges() {
         return exchangeRepository.findAll();
+    }
+
+    public List<Exchange> getUserExchanges(Integer userID){
+        return exchangeRepository.findAllByUserId(userID);
     }
 
     @Transactional

@@ -101,6 +101,36 @@
     </div>
 
 </div>
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Wymiana z</th>
+            <th scope="col">Ilość</th>
+            <th scope="col">Wymiana na</th>
+            <th scope="col">Ilość</th>
+            <th scope="col">Użytkownik</th>
+            <th scope="col">Pracownik</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${exchangeList.size() > 0}" th:each="exchange : ${exchangeList}">
+            <td th:text="${#dates.format(exchange.exchangeDate, 'dd/MM/yyyy, HH:mm')}"></td>
+            <td th:text="${exchange.exchangeFrom.currency.shortName + ' (' + exchange.exchangeFrom.currency.fullName + ')'}"></td>
+            <td th:text="${exchange.amount}"></td>
+            <td th:text="${exchange.exchangeTo.currency.shortName + ' (' + exchange.exchangeTo.currency.fullName +')'}"></td>
+            <td th:text="${exchange.fullPrice}"></td>
+            <td th:text="${exchange.user.firstName + ' ' + exchange.user.lastName}"></td>
+            <td th:text="${exchange.employee.firstName + ' ' + exchange.employee.lastName}"></td>
+        </tr>
+        <tr th:unless="${exchangeList.size() > 0}">
+            <th colspan="7" class="centerText">Historia wymian jest pusta</th>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>

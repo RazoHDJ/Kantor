@@ -41,7 +41,6 @@ public class ExchangeRateService {
     }
 
     public void addNewExchange(NewExchangeRateDTO newExchange) {
-
         exchangeRateRepository.save(
                 ExchangeRate.builder()
                         .date(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
@@ -56,7 +55,6 @@ public class ExchangeRateService {
                                 .shortName(newExchange.getShortName())
                                 .build()))
                         .build());
-
     }
 
     public void delete(Integer exchangeID) {
