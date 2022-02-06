@@ -1,7 +1,9 @@
 package com.example.kantor.controller;
 
 import com.example.kantor.dto.ExchangeDTO;
+import com.example.kantor.exceptions.EmployeeNotFoundException;
 import com.example.kantor.models.Currency;
+import com.example.kantor.models.Employee;
 import com.example.kantor.models.ExchangeRate;
 import com.example.kantor.models.User;
 import com.example.kantor.service.ExchangeRateService;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -62,7 +65,7 @@ public class ExchangeController {
     }
 
     @PostMapping("")
-    public String addNewExchangeToDatabase(@ModelAttribute ExchangeDTO exchangeDTO, Model model, Authentication authentication) {
+    public String addNewExchangeToDatabase(@ModelAttribute @Valid ExchangeDTO exchangeDTO, Model model, Authentication authentication) {
         BigDecimal fullPrice = exchangeDTO.getFromExchangeRate().getValue()
                 .multiply(exchangeDTO.getAmount())
                 .divide(exchangeDTO.getToExchangeRate().getValue(), 2, RoundingMode.HALF_UP);
@@ -76,10 +79,12 @@ public class ExchangeController {
 
             return "exchange/failed";
         } else {
-            securityService.getCurrentEmployee(authentication).ifPresent(employee -> {
-                exchangeDTO.setEmployee(employee);
-                exchangeService.addNewExchange(exchangeDTO);
-            });
+            Employee employee = securityService.getCurrentEmployee(authentication)
+                    .orElseThrow(EmployeeNotFoundException::new);
+
+            exchangeDTO.setEmployee(employee);
+            exchangeService.addNewExchange(exchangeDTO);
+
             return "redirect:/exchange/all";
         }
     }

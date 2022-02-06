@@ -3,6 +3,8 @@ package com.example.kantor.models;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
@@ -20,6 +22,9 @@ public class ExchangeRate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @NotNull
+    @DecimalMin(value = "0.0001")
     @Column(name = "value", precision = 17, scale = 4)
     private BigDecimal value;
     private Date date;

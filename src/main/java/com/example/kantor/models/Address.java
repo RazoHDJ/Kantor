@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -17,9 +18,13 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotBlank
     private String street;
-    private Integer houseNumber;
+    @NotBlank
+    private String houseNumber;
+    @NotBlank
     private String zipCode;
+    @NotBlank
     private String city;
 
     @JsonBackReference

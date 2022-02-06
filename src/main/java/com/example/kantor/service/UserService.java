@@ -1,5 +1,7 @@
 package com.example.kantor.service;
 
+import com.example.kantor.exceptions.AddressNotFoundException;
+import com.example.kantor.exceptions.UserNotFoundException;
 import com.example.kantor.models.Address;
 import com.example.kantor.models.User;
 import com.example.kantor.repository.AddressRepository;
@@ -23,29 +25,33 @@ public class UserService {
     }
 
     public void updateUser(User updatedUser) {
-        userRepository.findById(updatedUser.getId()).ifPresent(user -> {
+        User user = userRepository.findById(updatedUser.getId())
+                .orElseThrow(() -> new UserNotFoundException(updatedUser.getId()));
+
         user.setFirstName(updatedUser.getFirstName());
         user.setLastName(updatedUser.getLastName());
         user.setPhoneNumber(updatedUser.getPhoneNumber());
 
         userRepository.save(user);
-        });
+
     }
 
     public void addAddress(Integer id, Address newAddress) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+        newAddress.setUser(user);
+        addressRepository.save(newAddress);
 
-        userRepository.findById(id).ifPresent(user -> {
-            newAddress.setUser(user);
-            addressRepository.save(newAddress);
-        });
     }
 
     public void deleteAddress(Integer userID, Integer addressID) {
-        addressRepository.findById(addressID).ifPresent(address -> {
-            if(Objects.equals(address.getUser().getId(), userID)){
-                addressRepository.delete(address);
-            }
-        });
+        Address address = addressRepository.findById(addressID)
+                .orElseThrow(() -> new AddressNotFoundException(addressID));
+
+        if (Objects.equals(address.getUser().getId(), userID)) {
+            addressRepository.delete(address);
+        }
+
     }
 
     public List<User> getAllUsers() {
@@ -63,6 +69,8 @@ public class UserService {
     }
 
     public void deleteUser(Integer id) {
-        userRepository.findById(id).ifPresent(userRepository::delete);
+        User userToDelete = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+        userRepository.delete(userToDelete);
     }
 }

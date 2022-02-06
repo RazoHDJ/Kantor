@@ -1,0 +1,89 @@
+<!--ERROR PAGE-->
+<!--https://codepen.io/saransh/pen/jOKyjZ-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl-PL">
+<head>
+    <link rel="stylesheet" type="text/css" href="../../static/css/errorCss.css"/>
+    <meta charset="UTF-8">
+    <title>Kantor</title>
+
+
+    <link href="../static/css/errorCss.css" th:href="@{/css/errorCss.css}" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+            integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+            integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+            crossorigin="anonymous"></script>
+
+</head>
+<body id="body">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">Kantor</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" th:href="@{/}">Kurs walut</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/user}">Klienci</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/exchange}">Wymiana walut</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/exchange/all}">Historia transakcji</a>
+                </li>
+            </ul>
+            <form class="d-flex">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item buttonsInNavbarPadding">
+                        <a role="button" class="btn btn-secondary" th:href="@{/logout}">Wyloguj</a>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<svg width="380px" height="500px" viewBox="0 0 837 1045" xmlns="http://www.w3.org/2000/svg">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M353,9 L626.664028,170 L626.664028,487 L353,642 L79.3359724,487 L79.3359724,170 L353,9 Z"
+              id="Polygon-1" stroke="#007FB2" stroke-width="6"></path>
+        <path d="M78.5,529 L147,569.186414 L147,648.311216 L78.5,687 L10,648.311216 L10,569.186414 L78.5,529 Z"
+              id="Polygon-2" stroke="#EF4A5B" stroke-width="6"></path>
+        <path d="M773,186 L827,217.538705 L827,279.636651 L773,310 L719,279.636651 L719,217.538705 L773,186 Z"
+              id="Polygon-3" stroke="#795D9C" stroke-width="6"></path>
+        <path d="M639,529 L773,607.846761 L773,763.091627 L639,839 L505,763.091627 L505,607.846761 L639,529 Z"
+              id="Polygon-4" stroke="#F2773F" stroke-width="6"></path>
+        <path d="M281,801 L383,861.025276 L383,979.21169 L281,1037 L179,979.21169 L179,861.025276 L281,801 Z"
+              id="Polygon-5" stroke="#36B455" stroke-width="6"></path>
+    </g>
+</svg>
+<div class="message-box">
+    <h1>Error</h1>
+    <h4 th:text="${errorMessage}"></h4>
+    <div class="buttons-con">
+        <div class="action-link-wrap">
+            <a onclick="history.back()" class="link-button link-back-button">Wróć</a>
+            <a href="/" class="link-button">Strona główna</a>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

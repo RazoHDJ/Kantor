@@ -4,6 +4,8 @@ package com.example.kantor.models;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -37,7 +39,13 @@ public class Exchange {
     private Employee employee;
 
     private Date exchangeDate;
+
+    @NotNull
+    @DecimalMin(value = "1")
     private BigDecimal amount;
+
+    @NotNull
+    @DecimalMin(value = "0.01")
     private BigDecimal fullPrice;
 
 

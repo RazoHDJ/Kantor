@@ -1,5 +1,6 @@
 package com.example.kantor.controller;
 
+import com.example.kantor.exceptions.UserCouldNotBeAdded;
 import com.example.kantor.exceptions.UserNotFoundException;
 import com.example.kantor.models.Address;
 import com.example.kantor.models.User;
@@ -8,6 +9,8 @@ import com.example.kantor.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/user")
@@ -30,10 +33,10 @@ public class UserController {
 
     @GetMapping("/{id}") // profil użytkownika
     public String userProfile(@PathVariable Integer id, Model model) {
-        userService.getUser(id).ifPresent(user -> {
-            model.addAttribute("user", user);
-            model.addAttribute("exchangeList", exchangeService.getUserExchanges(id));
-        });
+        User user = userService.getUser(id).orElseThrow(() -> new UserNotFoundException(id));
+
+        model.addAttribute("user", user);
+        model.addAttribute("exchangeList", exchangeService.getUserExchanges(id));
 
         return "user/user_preview";
     }
@@ -47,24 +50,25 @@ public class UserController {
 
     @GetMapping("/edit/{id}") // edytowanie konkretnego użytkownika
     public String editUser(@PathVariable Integer id, Model model) {
-        userService.getUser(id).ifPresent(user -> model.addAttribute("user", user));
+        User user = userService.getUser(id).orElseThrow(() -> new UserNotFoundException(id));
+        model.addAttribute("user", user);
 
         return "user/user_edit";
     }
 
     @PostMapping("") //dodawanie do bazy danych użytkownika
-    public String addUserToDatabase(@ModelAttribute User user) {
+    public String addUserToDatabase(@ModelAttribute @Valid User user) {
         userService.addUser(user);
 
         return "redirect:/user";
     }
 
     @PostMapping("/{id}") // update użytkownika w bazie danych
-    public String updateUserInDatabase(@ModelAttribute User user, @PathVariable Integer id) {
+    public String updateUserInDatabase(@Valid @ModelAttribute User user, @PathVariable Integer id) {
         user.setId(id);
         userService.updateUser(user);
 
-        return ("redirect:/user/"+id.toString());
+        return ("redirect:/user/" + id.toString());
     }
 
     @DeleteMapping("/{id}") //usuwanie użytkownika
@@ -83,7 +87,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}/address") // dodawanie nowego adresu do użytkownika
-    public String addAddress(@PathVariable Integer id, @ModelAttribute Address newAddress) {
+    public String addAddress(@PathVariable Integer id, @Valid @ModelAttribute Address newAddress) {
         userService.addAddress(id, newAddress);
 
         return ("redirect:/user/" + id.toString());

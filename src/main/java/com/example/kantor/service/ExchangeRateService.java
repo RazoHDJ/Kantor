@@ -1,6 +1,7 @@
 package com.example.kantor.service;
 
 import com.example.kantor.dto.NewExchangeRateDTO;
+import com.example.kantor.exceptions.ExchangeRateNotFound;
 import com.example.kantor.models.Currency;
 import com.example.kantor.models.ExchangeRate;
 import com.example.kantor.repository.CurrencyRepository;
@@ -58,28 +59,30 @@ public class ExchangeRateService {
     }
 
     public void delete(Integer exchangeID) {
-        exchangeRateRepository.findById(exchangeID).ifPresent(exchangeRate -> {
-            currencyRepository.delete(exchangeRate.getCurrency());
-            exchangeRateRepository.delete(exchangeRate);
-        });
+        ExchangeRate exchangeRate = exchangeRateRepository.findById(exchangeID)
+                .orElseThrow(() -> new ExchangeRateNotFound(exchangeID));
+        currencyRepository.delete(exchangeRate.getCurrency());
+        exchangeRateRepository.delete(exchangeRate);
+
     }
 
     public void updateExchange(Integer id, NewExchangeRateDTO newExchange) {
-        exchangeRateRepository.findById(id).ifPresent(toUpdateExchange -> {
-            //update exchange
-            toUpdateExchange.setDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
-            toUpdateExchange.setValue(new BigDecimal(newExchange.getValue()
-                    .replace(",", "."))
-                    .setScale(4, RoundingMode.HALF_UP));
-            //update currency
-            Currency currencyToUpdate = toUpdateExchange.getCurrency();
-            currencyToUpdate.setAmount(new BigDecimal(newExchange.getAmount()
-                    .replace(",", "."))
-                    .setScale(2, RoundingMode.HALF_UP));
-            currencyToUpdate.setFullName(newExchange.getFullName());
-            currencyToUpdate.setShortName(newExchange.getShortName());
-            toUpdateExchange.setCurrency(currencyToUpdate);
-            exchangeRateRepository.save(toUpdateExchange);
-        });
+        ExchangeRate toUpdateExchange = exchangeRateRepository.findById(id)
+                .orElseThrow(() -> new ExchangeRateNotFound(id));
+        //update exchange
+        toUpdateExchange.setDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        toUpdateExchange.setValue(new BigDecimal(newExchange.getValue()
+                .replace(",", "."))
+                .setScale(4, RoundingMode.HALF_UP));
+        //update currency
+        Currency currencyToUpdate = toUpdateExchange.getCurrency();
+        currencyToUpdate.setAmount(new BigDecimal(newExchange.getAmount()
+                .replace(",", "."))
+                .setScale(2, RoundingMode.HALF_UP));
+        currencyToUpdate.setFullName(newExchange.getFullName());
+        currencyToUpdate.setShortName(newExchange.getShortName());
+        toUpdateExchange.setCurrency(currencyToUpdate);
+        exchangeRateRepository.save(toUpdateExchange);
+
     }
 }

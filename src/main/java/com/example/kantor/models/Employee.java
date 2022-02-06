@@ -3,6 +3,7 @@ package com.example.kantor.models;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
@@ -17,7 +18,9 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
 
     @OneToOne(cascade = CascadeType.ALL)
