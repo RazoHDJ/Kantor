@@ -39,6 +39,7 @@ public class UserService {
     public void addAddress(Integer id, Address newAddress) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
+        newAddress.setId(null);
         newAddress.setUser(user);
         addressRepository.save(newAddress);
 

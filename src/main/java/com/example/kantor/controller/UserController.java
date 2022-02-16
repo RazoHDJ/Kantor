@@ -78,7 +78,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/{id}/address") // fomularz dodawania użytkownika
+    @GetMapping("/{id}/address") // fomularz dodawania adresu
     public String openAddressForm(@PathVariable Integer id, Model model) {
         model.addAttribute("address", new Address());
         model.addAttribute("userID", id);
